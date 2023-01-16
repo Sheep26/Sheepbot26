@@ -101,17 +101,6 @@ async def embed(interaction: discord.Interaction):
 @bot.tree.command(name='rat')
 async def rat(interaction: discord.Interaction):
     await interaction.response.send_message("https://www.youtube.com/watch?v=vdVnnMOTe3Q")
-
-@bot.tree.command(name='game')
-@app_commands.describe(arg = "what game")
-async def game(interaction: discord.Interaction, arg: str):
-    if interaction.user.id == 634293671763771395:
-        gamename = arg
-        activity = discord.Game(name=gamename)
-        await bot.change_presence(status=discord.Status.online, activity=activity)
-        await interaction.response.send_message(f"Changed bot game to {arg}", ephemeral=True)
-    else:
-        interaction.response.send_message("You do not have permision")
 @bot.event
 async def on_ready():
     activity = discord.Game(name=gamename)
