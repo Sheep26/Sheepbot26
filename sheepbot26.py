@@ -8,8 +8,7 @@ from discord.ext import commands
 import time
 import sys
 bot = commands.Bot(command_prefix=".", intents = discord.Intents.all())
-ratcounter = 0
-gamename = "Sheepland"
+gamename = ""
 sus1 = ["is sus", "was ejected", "is so sus that he got sent out to space", "is the sussiest person alive"]
 insults = ["is trash", "sucks", "is stupid", "is the dumbest person alive", "is the fattest person alive", "bro your so dogwater noone would ever want you on there team", "is even more trash than the trash i took out last night", "was a accident", "had a brick drop on their head when they were born", "is a chicken", "is fat"]
 dog1 = [
@@ -23,14 +22,18 @@ dog1 = [
 dog = 0
 ramutil = 0
 cpuutil = 0
-email = ["gmail.com", "hotmail.com", "outlook.com", "oatlocker.com", "yahoo.co.nz", "oatlocker.com", "deeznuts.com", "gmail.com", "yahoo.co.nz", "outlook.com", "gmail.com"]
+#email = ["gmail.com", "hotmail.com", "outlook.com", "oatlocker.com", "yahoo.co.nz", "oatlocker.com", "deeznuts.com", "gmail.com", "yahoo.co.nz", "outlook.com", "gmail.com"]
 number = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
-letter = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "f", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "b", "C", "E", "F", "G", "H", "I", "F", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+#letter = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "f", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "b", "C", "E", "F", "G", "H", "I", "F", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
 #, ephemeral=True
 with open('config.json') as  f:
     data1 = json.load(f)
-for data in data1['data']:
-    token = data['token']
+for data in data1['token']:
+    token = data
+for data in data1['insults']:
+    insults.append(data)
+for data in data1['gameName']:
+    gamename = data
 @bot.tree.command(name='dogwater')
 @app_commands.describe(who = "who is dogwater")
 async def dogwater(interaction: discord.Interaction, who: str):
@@ -101,6 +104,17 @@ async def embed(interaction: discord.Interaction):
 @bot.tree.command(name='rat')
 async def rat(interaction: discord.Interaction):
     await interaction.response.send_message("https://www.youtube.com/watch?v=vdVnnMOTe3Q")
+
+@bot.tree.command(name='game')
+@app_commands.describe(arg = "what game")
+async def game(interaction: discord.Interaction, arg: str):
+    if interaction.user.id == 634293671763771395:
+        gamename = arg
+        activity = discord.Game(name=gamename)
+        await bot.change_presence(status=discord.Status.online, activity=activity)
+        await interaction.response.send_message(f"Changed bot game to {arg}", ephemeral=True)
+    else:
+        interaction.response.send_message("You do not have permision")
 @bot.event
 async def on_ready():
     activity = discord.Game(name=gamename)

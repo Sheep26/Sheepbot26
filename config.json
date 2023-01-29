@@ -1,7 +1,11 @@
 {
-	"data": [
-		{
-			"token": ""
-		}
+	"token": [
+		""
+	],
+	"insults": [
+		
+	],
+	"gameName": [
+		"Sheepland"
 	]
 }
