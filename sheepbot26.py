@@ -4,6 +4,8 @@ import json
 import random
 from discord import app_commands
 from discord.ext import commands
+from os import system, name
+import asyncio
 bot = commands.Bot(command_prefix=".", intents = discord.Intents.all())
 gamename = ""
 sus1 = ["is sus", "was ejected", "is so sus that he got sent out to space", "is the sussiest person alive"]
@@ -17,12 +19,15 @@ dog1 = [
   "drank dogwater"
 ]
 dog = 0
-ramutil = 0
-cpuutil = 0
 email = ["gmail.com", "hotmail.com", "outlook.com", "oatlocker.com", "yahoo.co.nz", "oatlocker.com", "deeznuts.com", "gmail.com", "yahoo.co.nz", "outlook.com", "gmail.com"]
 number = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
 letter = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "f", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "b", "C", "E", "F", "G", "H", "I", "F", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
 #, ephemeral=True
+def clear():
+    if name == 'nt':
+        system('cls')
+    else:
+        system('clear')
 with open('config.json') as  f:
     data1 = json.load(f)
 for data in data1['token']:
@@ -31,6 +36,7 @@ for data in data1['insults']:
     insults.append(data)
 for data in data1['gameName']:
     gamename = data
+
 @bot.tree.command(name='dogwater')
 @app_commands.describe(who = "who is dogwater")
 async def dogwater(interaction: discord.Interaction, who: str):
@@ -55,9 +61,8 @@ async def sus(interaction: discord.Interaction, who: str):
 @bot.tree.command(name='embed')
 async def embed(interaction: discord.Interaction):
     test_embed=discord.Embed(title="random Embed", url="https://google.com ",description="random description" , color=discord.Color.blue())
-    test_embed.add_field(name='random feild', value="random value", inline=True)
+    test_embed.add_field(name='random field', value="random value", inline=True)
     await interaction.response.send_message(embed=test_embed)
-
 
 @bot.tree.command(name='heck')
 @app_commands.describe(who = "who")
@@ -87,6 +92,25 @@ async def heck(interaction: discord.Interaction, who: str):
 async def rat(interaction: discord.Interaction):
     await interaction.response.send_message("https://www.youtube.com/watch?v=vdVnnMOTe3Q")
 
+async def uptimecounter():
+    await bot.wait_until_ready()
+    sec = 0
+    min = 0
+    hour = 0
+    update: str = ""
+    while not bot.is_closed():
+        sec += 1
+        if sec == 60:
+            sec = 0
+            min += 1
+            if min == 60:
+                min = 0
+                hour += 1
+        uptime = f"Uptime {hour} : {min} : {sec}"
+        print(uptime)
+        await asyncio.sleep(1)
+        clear()
+
 @bot.event
 async def on_ready():
     activity = discord.Game(name=gamename)
@@ -94,8 +118,8 @@ async def on_ready():
     try:
         synced = await bot.tree.sync()
         print(f'Synced {len(synced)} commands')
-        print(f"Bot ready as {bot.user}")
     except Exception as e:
         print(e)
+    await uptimecounter()
 
 bot.run(token)
