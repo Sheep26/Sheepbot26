@@ -5,9 +5,11 @@ import random
 from discord import app_commands
 from discord.ext import commands
 from os import system, name
-import asyncio
+import datetime
+import subprocess
 bot = commands.Bot(command_prefix=".", intents = discord.Intents.all())
 gamename = ""
+startTime = 0
 sus1 = ["is sus", "was ejected", "is so sus that he got sent out to space", "is the sussiest person alive"]
 insults = ["is trash", "sucks", "is stupid", "is the dumbest person alive", "is the fattest person alive", "bro your so dogwater noone would ever want you on there team", "is even more trash than the trash i took out last night", "was a accident", "had a brick drop on their head when they were born", "is a chicken", "is fat"]
 dog1 = [
@@ -92,25 +94,6 @@ async def heck(interaction: discord.Interaction, who: str):
 async def rat(interaction: discord.Interaction):
     await interaction.response.send_message("https://www.youtube.com/watch?v=vdVnnMOTe3Q")
 
-async def uptimecounter():
-    await bot.wait_until_ready()
-    sec = 0
-    min = 0
-    hour = 0
-    update: str = ""
-    while not bot.is_closed():
-        sec += 1
-        if sec == 60:
-            sec = 0
-            min += 1
-            if min == 60:
-                min = 0
-                hour += 1
-        uptime = f"Uptime {hour} : {min} : {sec}"
-        print(uptime)
-        await asyncio.sleep(1)
-        clear()
-
 @bot.event
 async def on_ready():
     activity = discord.Game(name=gamename)
@@ -120,6 +103,12 @@ async def on_ready():
         print(f'Synced {len(synced)} commands')
     except Exception as e:
         print(e)
-    await uptimecounter()
+    
+def get_uptime():
+    return str(datetime.timedelta(seconds=int(round(time.time()-startTime))))
 
-bot.run(token)
+startTime = time.time()
+
+if __name__ == '__main__':
+    subprocess.Popen("server.py", shell=True)
+    bot.run(token)
