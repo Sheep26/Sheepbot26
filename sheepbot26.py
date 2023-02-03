@@ -107,6 +107,10 @@ async def on_ready():
 def get_uptime():
     return str(datetime.timedelta(seconds=int(round(time.time()-startTime))))
 
+def logout():
+    bot.close()
+    print("Logging out bot")
+
 startTime = time.time()
 
 if __name__ == '__main__':
