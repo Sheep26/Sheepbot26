@@ -11,6 +11,7 @@ import yt_dlp
 import asyncio
 bot = commands.Bot(command_prefix=".", intents = discord.Intents.all())
 gamename = ""
+server = False
 startTime = 0
 sus1 = ["is sus", "was ejected", "is so sus that he got sent out to space", "is the sussiest person alive"]
 insults = ["is trash", "sucks", "is stupid", "is the dumbest person alive", "is the fattest person alive", "bro your so dogwater noone would ever want you on there team", "is even more trash than the trash i took out last night", "was a accident", "had a brick drop on their head when they were born", "is a chicken", "is fat"]
@@ -80,6 +81,8 @@ for data in data1['insults']:
     insults.append(data)
 for data in data1['gameName']:
     gamename = data
+for data in data1['WebServer']:
+    server = data
 
 @bot.tree.command(name='dogwater')
 @app_commands.describe(who = "who is dogwater")
@@ -146,7 +149,7 @@ async def join(interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=True)
         await interaction.followup.send("You are not in a voice channel.")
         return
-    
+
 @bot.tree.command(name='play')
 @app_commands.describe(song = "song")
 async def play(interaction: discord.Interaction, song: str):
@@ -154,10 +157,13 @@ async def play(interaction: discord.Interaction, song: str):
         await interaction.response.defer(thinking = True)
         guild = interaction.guild
         voice_channel = guild.voice_client
+        
         filename = await YTDLSource.from_url(song, loop=bot.loop)
-        voice_channel.play(discord.FFmpegPCMAudio(executable="ffmpeg.exe", source=filename))
-        #await interaction.response.edit_message(content='**Now playing:** {}'.format(filename))
-        await interaction.followup.send('**Now playing:** {}'.format(filename))
+        try:
+            voice_channel.play(discord.FFmpegPCMAudio(executable="ffmpeg.exe", source=filename))
+            await interaction.followup.send('**Now playing:** {}'.format(filename))
+        except:
+            await interaction.followup.send('Failed to play music')
     except:
         await interaction.response.send_message("The bot is not connected to a voice channel.")
 
@@ -176,20 +182,20 @@ async def leave(interaction: discord.Interaction):
 async def pause(interaction: discord.Interaction):
     guild = interaction.guild
     voice_channel = guild.voice_client
-    if voice_channel.is_playing():
+    try :
         await interaction.response.send_message("Paused the music.")
         voice_channel.pause()
-    else:
+    except:
         await interaction.response.send_message("The bot is not playing anything at the moment.")
         
 @bot.tree.command(name='resume')
 async def resume(interaction: discord.Interaction):
     guild = interaction.guild
     voice_channel = guild.voice_client
-    if voice_channel.is_playing():
+    try:
         await interaction.response.send_message("Resumed the music.")
         await voice_channel.resume()
-    else:
+    except:
         await interaction.response.send_message("The bot is not playing anything at the moment.")
         
 @bot.tree.command(name='stop_music')
@@ -225,5 +231,6 @@ def logout():
 startTime = time.time()
 
 if __name__ == '__main__':
-    subprocess.Popen("server.py", shell=True)
+    if server == True:
+        subprocess.Popen("server.py", shell=True)
     bot.run(token)
