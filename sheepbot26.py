@@ -84,34 +84,34 @@ for data in data1['gameName']:
 for data in data1['WebServer']:
     server = data
 
-@bot.tree.command(name='dogwater')
+@bot.tree.command(name='dogwater', description = "Ur dogwater kid")
 @app_commands.describe(who = "who is dogwater")
 async def dogwater(interaction: discord.Interaction, who: str):
     global dog
     dog = random.choice(dog1)
     await interaction.response.send_message(f"{who} {dog}")
 
-@bot.tree.command(name="insult")
+@bot.tree.command(name="insult", description = "Insults people")
 @app_commands.describe(who = "who")
 async def insult(interaction: discord.Interaction, who: str):
     global insults
     ins = random.choice(insults)
     await interaction.response.send_message(f"{who} {ins}")
 
-@bot.tree.command(name='sus')
+@bot.tree.command(name='sus', description = "Amongus")
 @app_commands.describe(who = "who is sus")
 async def sus(interaction: discord.Interaction, who: str):
     global sus1
     sus2 = random.choice(sus1)
     await interaction.response.send_message(f"{who} {sus2}")
     
-@bot.tree.command(name='embed')
+"""@bot.tree.command(name='embed', description = "Random embed")
 async def embed(interaction: discord.Interaction):
     test_embed=discord.Embed(title="random Embed", url="https://google.com ",description="random description" , color=discord.Color.blue())
     test_embed.add_field(name='random field', value="random value", inline=True)
-    await interaction.response.send_message(embed=test_embed)
+    await interaction.response.send_message(embed=test_embed)"""
 
-@bot.tree.command(name='heck')
+@bot.tree.command(name='heck', description = "Heck")
 @app_commands.describe(who = "who")
 async def heck(interaction: discord.Interaction, who: str):
     letters = random.choice(letter)
@@ -135,11 +135,15 @@ async def heck(interaction: discord.Interaction, who: str):
     heck_embed.add_field(name='Password', value=f"{letters}", inline=True)
     await interaction.response.send_message(embed=heck_embed)
 
-@bot.tree.command(name='rat')
+@bot.tree.command(name='rat', description = "Responds with rat?")
 async def rat(interaction: discord.Interaction):
-    await interaction.response.send_message("https://www.youtube.com/watch?v=vdVnnMOTe3Q")
+    await interaction.response.send_message("Rat?")
     
-@bot.tree.command(name='join')
+@bot.tree.command(name='ping', description = "Check the bots ping")
+async def rat(interaction: discord.Interaction):
+     await interaction.response.send_message(f"The bots ping is {round(bot.latency * 1000)}ms")
+    
+@bot.tree.command(name='join', description = "Joins vc")
 async def join(interaction: discord.Interaction):
     if interaction.user.voice is not None:
         vc = interaction.user.voice.channel
@@ -150,7 +154,7 @@ async def join(interaction: discord.Interaction):
         await interaction.followup.send("You are not in a voice channel.")
         return
 
-@bot.tree.command(name='play')
+@bot.tree.command(name='play', description = "Plays music")
 @app_commands.describe(song = "song")
 async def play(interaction: discord.Interaction, song: str):
     try :
@@ -158,16 +162,26 @@ async def play(interaction: discord.Interaction, song: str):
         guild = interaction.guild
         voice_channel = guild.voice_client
         
-        filename = await YTDLSource.from_url(song, loop=bot.loop)
+        try:
+            filename = await YTDLSource.from_url(song, loop=bot.loop)
+        except:
+            await interaction.followup.send('Failed to download music')
+            return
         try:
             voice_channel.play(discord.FFmpegPCMAudio(executable="ffmpeg.exe", source=filename))
-            await interaction.followup.send('**Now playing:** {}'.format(filename))
+            music_name: str = filename
+            music_name = music_name.replace("-", " ")
+            music_name = music_name.replace("_", " ")
+            music_name = music_name.replace(".webm", "")
+            music_embed=discord.Embed(title='**Now playing:** {}'.format(music_name), color=discord.Color.blue())
+            await interaction.followup.send(embed=music_embed)
         except:
             await interaction.followup.send('Failed to play music')
+            return
     except:
         await interaction.response.send_message("The bot is not connected to a voice channel.")
 
-@bot.tree.command(name='leave')
+@bot.tree.command(name='leave', description = "Leaves vc")
 async def leave(interaction: discord.Interaction):
     guild = interaction.guild
     vc = guild.voice_client
@@ -178,7 +192,7 @@ async def leave(interaction: discord.Interaction):
     else:
         await interaction.response.send_message("The bot isn't in the voice channel")
         
-@bot.tree.command(name='pause')
+@bot.tree.command(name='pause', description = "Pauses music")
 async def pause(interaction: discord.Interaction):
     guild = interaction.guild
     voice_channel = guild.voice_client
@@ -188,7 +202,7 @@ async def pause(interaction: discord.Interaction):
     except:
         await interaction.response.send_message("The bot is not playing anything at the moment.")
         
-@bot.tree.command(name='resume')
+@bot.tree.command(name='resume', description = "Resumes music")
 async def resume(interaction: discord.Interaction):
     guild = interaction.guild
     voice_channel = guild.voice_client
@@ -198,7 +212,7 @@ async def resume(interaction: discord.Interaction):
     except:
         await interaction.response.send_message("The bot is not playing anything at the moment.")
         
-@bot.tree.command(name='stop_music')
+@bot.tree.command(name='stop_music', description = "Stops music")
 async def stop_music(interaction: discord.Interaction):
     guild = interaction.guild
     voice_channel = guild.voice_client
