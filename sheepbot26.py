@@ -168,7 +168,7 @@ async def play(interaction: discord.Interaction, song: str):
             await interaction.followup.send('Failed to download music')
             return
         try:
-            voice_channel.play(discord.FFmpegPCMAudio(executable="ffmpeg.exe", source=filename))
+            voice_channel.play(discord.FFmpegPCMAudio(source=filename))
             music_name: str = filename
             music_name = music_name.replace("-", " ")
             music_name = music_name.replace("_", " ")
