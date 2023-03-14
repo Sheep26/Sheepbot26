@@ -187,6 +187,7 @@ async def leave(interaction: discord.Interaction):
     vc = guild.voice_client
 
     if vc:
+        vc.cleanup()
         await vc.disconnect()
         await interaction.response.send_message('Leaving voice channel')
     else:
