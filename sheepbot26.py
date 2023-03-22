@@ -11,7 +11,6 @@ import yt_dlp
 import asyncio
 bot = commands.Bot(command_prefix=".", intents = discord.Intents.all())
 gamename = ""
-server = False
 startTime = 0
 sus1 = ["is sus", "was ejected", "is so sus that he got sent out to space", "is the sussiest person alive"]
 insults = ["is trash", "sucks", "is stupid", "is the dumbest person alive", "is the fattest person alive", "bro your so dogwater noone would ever want you on there team", "is even more trash than the trash i took out last night", "was a accident", "had a brick drop on their head when they were born", "is a chicken", "is fat"]
@@ -246,6 +245,4 @@ def logout():
 startTime = time.time()
 
 if __name__ == '__main__':
-    if server == True:
-        subprocess.Popen("server.py", shell=True)
     bot.run(token)
