@@ -13,7 +13,7 @@ bot = commands.Bot(command_prefix=".", intents = discord.Intents.all())
 gamename = ""
 startTime = 0
 sus1 = ["is sus", "was ejected", "is so sus that he got sent out to space", "is the sussiest person alive"]
-insults = ["is trash", "sucks", "is stupid", "is the dumbest person alive", "is the fattest person alive", "bro your so dogwater noone would ever want you on there team", "is even more trash than the trash i took out last night", "was a accident", "had a brick drop on their head when they were born", "is a chicken", "is fat"]
+insults = []
 songs = []
 dog1 = [
     "is dogwater",
@@ -76,29 +76,28 @@ with open('config.json') as  f:
     data1 = json.load(f)
 for data in data1['token']:
     token = data
+for data in data1['only-custom-insults']:
+    var1: bool = data
+    if(var1 == False):
+        for var2 in ["is trash", "sucks", "is stupid", "is the dumbest person alive", "is the fattest person alive", "bro your so dogwater noone would ever want you on there team", "is even more trash than the trash i took out last night", "was a accident", "had a brick drop on their head when they were born", "is a chicken", "is fat"]:
+            insults.append(var2)
 for data in data1['insults']:
     insults.append(data)
 for data in data1['gameName']:
     gamename = data
-for data in data1['WebServer']:
-    server = data
-
 @bot.tree.command(name='dogwater', description = "Ur dogwater kid")
-@app_commands.describe(who = "who is dogwater")
 async def dogwater(interaction: discord.Interaction, who: str):
     global dog
     dog = random.choice(dog1)
     await interaction.response.send_message(f"{who} {dog}")
 
 @bot.tree.command(name="insult", description = "Insults people")
-@app_commands.describe(who = "who")
 async def insult(interaction: discord.Interaction, who: str):
     global insults
     ins = random.choice(insults)
     await interaction.response.send_message(f"{who} {ins}")
 
 @bot.tree.command(name='sus', description = "Amongus")
-@app_commands.describe(who = "who is sus")
 async def sus(interaction: discord.Interaction, who: str):
     global sus1
     sus2 = random.choice(sus1)
@@ -109,9 +108,14 @@ async def embed(interaction: discord.Interaction):
     test_embed=discord.Embed(title="random Embed", url="https://google.com ",description="random description" , color=discord.Color.blue())
     test_embed.add_field(name='random field', value="random value", inline=True)
     await interaction.response.send_message(embed=test_embed)"""
+    
+@bot.tree.command(name='dmme', description = "Dms you")
+async def dmme(interaction: discord.Interaction, what: str):
+    user = bot.get_user(interaction.user.id)
+    await user.send(what)
+    await interaction.response.send_message(f"Done", ephemeral=True)
 
 @bot.tree.command(name='heck', description = "Heck")
-@app_commands.describe(who = "who")
 async def heck(interaction: discord.Interaction, who: str):
     letters = random.choice(letter)
     letters = letters + random.choice(letter)
@@ -154,7 +158,6 @@ async def join(interaction: discord.Interaction):
         return
 
 @bot.tree.command(name='play', description = "Plays music")
-@app_commands.describe(song = "song")
 async def play(interaction: discord.Interaction, song: str):
     try :
         await interaction.response.defer(thinking = True)
@@ -165,7 +168,6 @@ async def play(interaction: discord.Interaction, song: str):
             filename = await YTDLSource.from_url(song, loop=bot.loop)
         except:
             await interaction.followup.send('Failed to download music')
-            return
         try:
             voice_channel.play(discord.FFmpegPCMAudio(source=filename))
             music_name: str = filename
@@ -176,9 +178,8 @@ async def play(interaction: discord.Interaction, song: str):
             await interaction.followup.send(embed=music_embed)
         except:
             await interaction.followup.send('Failed to play music')
-            return
     except:
-        await interaction.response.send_message("The bot is not connected to a voice channel.")
+        await interaction.followup.send("The bot is not connected to a voice channel.")
 
 @bot.tree.command(name='leave', description = "Leaves vc")
 async def leave(interaction: discord.Interaction):
@@ -201,6 +202,10 @@ async def pause(interaction: discord.Interaction):
         voice_channel.pause()
     except:
         await interaction.response.send_message("The bot is not playing anything at the moment.")
+        
+@bot.tree.command(name='uptime', description = "Gets the bots uptime")
+async def uptime(interaction: discord.Interaction):
+    await interaction.response.send_message("The bots uptime is {}".format(get_uptime()))
         
 @bot.tree.command(name='resume', description = "Resumes music")
 async def resume(interaction: discord.Interaction):
@@ -235,14 +240,9 @@ async def on_ready():
 def get_uptime():
     return str(datetime.timedelta(seconds=int(round(time.time()-startTime))))
 
-def get_uptime_sec():
-    return (round(time.time()-startTime))
-
 def logout():
     bot.close()
     print("Logging out bot")
 
 startTime = time.time()
-
-if __name__ == '__main__':
-    bot.run(token)
+bot.run(token)

@@ -1,11 +1,17 @@
 {
 	"token": [
-		""
+		
 	],
+
 	"insults": [
 		
 	],
+
 	"gameName": [
 		"Sheepland"
+	],
+
+	"only-custom-insults": [
+		false
 	]
 }
