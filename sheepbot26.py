@@ -120,10 +120,6 @@ async def play(interaction: discord.Interaction, song: str):
         await interaction.response.defer(thinking = True)
         guild = interaction.guild
         voice_channel = guild.voice_client
-        for word in blockedWords:
-            if(word in song):
-                await interaction.followup.send("You can't type in that")
-                return
         try:
             filename = await YTDLSource.from_url(song, loop=bot.loop)
         except:
