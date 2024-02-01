@@ -152,7 +152,7 @@ async def pause(interaction: discord.Interaction):
 @bot.tree.command(name='uptime', description = "Gets the bots uptime")
 async def uptime(interaction: discord.Interaction):
     await interaction.response.send_message("The bots uptime is {}".format(get_uptime()))
-        
+
 @bot.tree.command(name='resume', description = "Resumes music")
 async def resume(interaction: discord.Interaction):
     guild = interaction.guild
