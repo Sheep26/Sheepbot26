@@ -75,9 +75,9 @@ for data in data1["blocked-words"]:
     blockedWords.append(data)
 
 @bot.tree.command(name='dogwater', description = "Ur dogwater kid")
-async def dogwater(interaction: discord.Interaction, who: discord.User):
-    await interaction.response.send_message(f"{(str (random.choice(dogwaterWords))).format(name = who.name)}")
-    
+async def dogwater(interaction: discord.Interaction, user: discord.User):
+    await interaction.response.send_message(f"{(str (random.choice(dogwaterWords))).format(name = user.name)}")
+
 @bot.tree.command(name='dmme', description = "Dms you")
 async def dmme(interaction: discord.Interaction, what: str):
     user = bot.get_user(interaction.user.id)
@@ -85,13 +85,13 @@ async def dmme(interaction: discord.Interaction, what: str):
     await interaction.response.send_message(f"Done", ephemeral=True)
 
 @bot.tree.command(name='heck', description = "Heck")
-async def heck(interaction: discord.Interaction, who: discord.User):
+async def heck(interaction: discord.Interaction, user: discord.User):
     letters: str = ""
     for x in range(10):
         letters = letters + random.choice(string.ascii_lowercase + string.ascii_uppercase + string.digits)
     email1 = random.choice(email)
-    heck_embed=discord.Embed(title=f"Hecked {who.name}", color=discord.Color.blue())
-    heck_embed.add_field(name='Email', value=f"{who.name}{letters[0]}{letters[1]}{letters[2]}{letters[3]}@{email1}", inline=True)
+    heck_embed=discord.Embed(title=f"Hecked {user.name}", color=discord.Color.blue())
+    heck_embed.add_field(name='Email', value=f"{user.name}{letters[0]}{letters[1]}{letters[2]}{letters[3]}@{email1}", inline=True)
     heck_embed.add_field(name='Password', value=f"{letters}", inline=True)
     await interaction.response.send_message(embed=heck_embed)
 
