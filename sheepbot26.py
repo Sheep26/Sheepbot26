@@ -4,14 +4,13 @@ import json
 import random
 from discord import app_commands
 from discord.ext import commands
-from os import system, name
 import datetime
 import string
 import yt_dlp
 import asyncio
 bot = commands.Bot(command_prefix=".", intents = discord.Intents.all())
 activity = ""
-startTime = 0
+startTime = time.time()
 songs = []
 blockedWords = []
 dogwaterWords = []
@@ -55,13 +54,6 @@ class YTDLSource(discord.PCMVolumeTransformer):
             data = data['entries'][0]
         filename = data['title'] if stream else ytdl.prepare_filename(data)
         return filename
-
-#, ephemeral=True
-def clear():
-    if name == 'nt':
-        system('cls')
-    else:
-        system('clear')
 
 with open('config.json') as  f:
     data1 = json.load(f)
@@ -212,7 +204,6 @@ def main():
     if token == None or token == "":
         print("No token, please provide a bot token")
         return
-    startTime = time.time()
     bot.run(token)
 
 if __name__ == "__main__":
