@@ -6,27 +6,17 @@ from discord import app_commands
 from discord.ext import commands
 from os import system, name
 import datetime
-import subprocess
+import string
 import yt_dlp
 import asyncio
 bot = commands.Bot(command_prefix=".", intents = discord.Intents.all())
 gamename = ""
 startTime = 0
-sus1 = ["is sus", "was ejected", "is so sus that he got sent out to space", "is the sussiest person alive"]
-insults = []
 songs = []
-dog1 = [
-    "is dogwater",
-    "bro your so dogwater noone would ever want you on there team",
-    "is trash att every game in existance", "is trash", "fell into dogwater",
-    "is even more trash than the trash i took out last night",
-  "is dogwater",
-  "drank dogwater"
-]
-dog = 0
+blockedWords = []
+dogwaterWords = []
 email = ["gmail.com", "hotmail.com", "outlook.com", "oatlocker.com", "yahoo.co.nz", "oatlocker.com", "deeznuts.com", "gmail.com", "yahoo.co.nz", "outlook.com", "gmail.com"]
-number = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
-letter = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "f", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "b", "C", "E", "F", "G", "H", "I", "F", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+token: str
 
 yt_dlp.utils.bug_reports_message = lambda: ''
 
@@ -72,42 +62,21 @@ def clear():
         system('cls')
     else:
         system('clear')
+
 with open('config.json') as  f:
     data1 = json.load(f)
 for data in data1['token']:
     token = data
-for data in data1['only-custom-insults']:
-    var1: bool = data
-    if(var1 == False):
-        for var2 in ["is trash", "sucks", "is stupid", "is the dumbest person alive", "is the fattest person alive", "bro your so dogwater noone would ever want you on there team", "is even more trash than the trash i took out last night", "was a accident", "had a brick drop on their head when they were born", "is a chicken", "is fat"]:
-            insults.append(var2)
-for data in data1['insults']:
-    insults.append(data)
 for data in data1['gameName']:
     gamename = data
+for data in data1['dogwater']:
+    dogwaterWords.append(data)
+for data in data1["blocked-words"]:
+    blockedWords.append(data)
+
 @bot.tree.command(name='dogwater', description = "Ur dogwater kid")
-async def dogwater(interaction: discord.Interaction, who: str):
-    global dog
-    dog = random.choice(dog1)
-    await interaction.response.send_message(f"{who} {dog}")
-
-@bot.tree.command(name="insult", description = "Insults people")
-async def insult(interaction: discord.Interaction, who: str):
-    global insults
-    ins = random.choice(insults)
-    await interaction.response.send_message(f"{who} {ins}")
-
-@bot.tree.command(name='sus', description = "Amongus")
-async def sus(interaction: discord.Interaction, who: str):
-    global sus1
-    sus2 = random.choice(sus1)
-    await interaction.response.send_message(f"{who} {sus2}")
-    
-"""@bot.tree.command(name='embed', description = "Random embed")
-async def embed(interaction: discord.Interaction):
-    test_embed=discord.Embed(title="random Embed", url="https://google.com ",description="random description" , color=discord.Color.blue())
-    test_embed.add_field(name='random field', value="random value", inline=True)
-    await interaction.response.send_message(embed=test_embed)"""
+async def dogwater(interaction: discord.Interaction, who: discord.User):
+    await interaction.response.send_message(f"{(str (random.choice(dogwaterWords))).format(name = who.name)}")
     
 @bot.tree.command(name='dmme', description = "Dms you")
 async def dmme(interaction: discord.Interaction, what: str):
@@ -116,25 +85,13 @@ async def dmme(interaction: discord.Interaction, what: str):
     await interaction.response.send_message(f"Done", ephemeral=True)
 
 @bot.tree.command(name='heck', description = "Heck")
-async def heck(interaction: discord.Interaction, who: str):
-    letters = random.choice(letter)
-    letters = letters + random.choice(letter)
-    letters = letters + random.choice(letter)
-    letters = letters + random.choice(letter)
-    letters = letters + random.choice(letter)
-    letters = letters + random.choice(letter)
-    letters = letters + random.choice(letter)
-    letters = letters + random.choice(letter)
-    letters = letters + random.choice(letter)
-    letters = letters + random.choice(letter)
-    letters = letters + random.choice(letter)
-    letters = letters + random.choice(letter) 
-    number = random.choice(letter)
-    number = number + random.choice(letter)
-    number = number + random.choice(letter)
+async def heck(interaction: discord.Interaction, who: discord.User):
+    letters: str = ""
+    for x in range(10):
+        letters = letters + random.choice(string.ascii_lowercase + string.ascii_uppercase + string.digits)
     email1 = random.choice(email)
-    heck_embed=discord.Embed(title=f"Hecked {who}", color=discord.Color.blue())
-    heck_embed.add_field(name='Email', value=f"{who}{number}@{email1}", inline=True)
+    heck_embed=discord.Embed(title=f"Hecked {who.name}", color=discord.Color.blue())
+    heck_embed.add_field(name='Email', value=f"{who.name}{letters[0]}{letters[1]}{letters[2]}{letters[3]}@{email1}", inline=True)
     heck_embed.add_field(name='Password', value=f"{letters}", inline=True)
     await interaction.response.send_message(embed=heck_embed)
 
@@ -143,7 +100,7 @@ async def rat(interaction: discord.Interaction):
     await interaction.response.send_message("Rat?")
     
 @bot.tree.command(name='ping', description = "Check the bots ping")
-async def rat(interaction: discord.Interaction):
+async def ping(interaction: discord.Interaction):
      await interaction.response.send_message(f"The bots ping is {round(bot.latency * 1000)}ms")
     
 @bot.tree.command(name='join', description = "Joins vc")
@@ -163,7 +120,10 @@ async def play(interaction: discord.Interaction, song: str):
         await interaction.response.defer(thinking = True)
         guild = interaction.guild
         voice_channel = guild.voice_client
-        
+        for word in blockedWords:
+            if(word in song):
+                await interaction.followup.send("You can't type in that")
+                return
         try:
             filename = await YTDLSource.from_url(song, loop=bot.loop)
         except:
@@ -226,6 +186,13 @@ async def stop_music(interaction: discord.Interaction):
         voice_channel.stop()
     else:
         await interaction.response.send_message("The bot is not playing anything at the moment.")
+        
+@bot.event
+async def on_message(message):
+    if message.author == bot.user:
+        return
+    if message.content == "ok":
+        await message.channel.send("ok")
 
 @bot.event
 async def on_ready():
