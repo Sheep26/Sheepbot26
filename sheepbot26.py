@@ -10,7 +10,7 @@ import string
 import yt_dlp
 import asyncio
 bot = commands.Bot(command_prefix=".", intents = discord.Intents.all())
-gamename = ""
+activity = ""
 startTime = 0
 songs = []
 blockedWords = []
@@ -67,8 +67,8 @@ with open('config.json') as  f:
     data1 = json.load(f)
 for data in data1['token']:
     token = data
-for data in data1['gameName']:
-    gamename = data
+for data in data1['Activity']:
+    activity = data
 for data in data1['dogwater']:
     dogwaterWords.append(data)
 for data in data1["blocked-words"]:
@@ -192,8 +192,9 @@ async def on_message(message):
 
 @bot.event
 async def on_ready():
-    activity = discord.Game(name=gamename)
-    await bot.change_presence(status=discord.Status.online, activity=activity)
+    if not activity == None:
+        activity = discord.Game(name=activity)
+        await bot.change_presence(status=discord.Status.online, activity=activity)
     try:
         synced = await bot.tree.sync()
         print(f'Synced {len(synced)} commands')
@@ -207,5 +208,12 @@ def logout():
     bot.close()
     print("Logging out bot")
 
-startTime = time.time()
-bot.run(token)
+def main():
+    if token == None or token == "":
+        print("No token, please provide a bot token")
+        return
+    startTime = time.time()
+    bot.run(token)
+
+if __name__ == "__main__":
+    main()
