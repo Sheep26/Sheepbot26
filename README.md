@@ -10,7 +10,7 @@ Then run main.py.
 You need a config to run the bot.
 An example config looks likes this
 ```
-// Config.json
+// config.json
 
 {
 	"token": [
