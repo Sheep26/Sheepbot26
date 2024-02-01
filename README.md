@@ -2,7 +2,9 @@
 Sheepbot26 is a discord bot I made because I was bored.
 
 # Usage
-Install the packages if you havn't already by running pip install requirements.txt.
+Install the packages if you havn't already by installing requirements.txt.
+Then get a config example found below and save it under config.json.
+Then run main.py.
 
 # Config
 You need a config to run the bot.
