@@ -66,7 +66,7 @@ for data in data1['dogwater']:
 
 @bot.tree.command(name='dogwater', description = "Ur dogwater kid")
 async def dogwater(interaction: discord.Interaction, user: discord.User):
-    await interaction.response.send_message(f"{(str (random.choice(dogwaterWords))).format(name = user.name)}")
+    await interaction.response.send_message(f"{(str (random.choice(dogwaterWords))).format(name = user.mention)}")
 
 @bot.tree.command(name='dmme', description = "Dms you")
 async def dmme(interaction: discord.Interaction, what: str):
@@ -182,6 +182,7 @@ async def on_message(message):
 
 @bot.event
 async def on_ready():
+    global activity
     if not activity == None:
         activity = discord.Game(name=activity)
         await bot.change_presence(status=discord.Status.online, activity=activity)
