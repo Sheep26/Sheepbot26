@@ -63,8 +63,6 @@ for data in data1['Activity']:
     activity = data
 for data in data1['dogwater']:
     dogwaterWords.append(data)
-for data in data1["blocked-words"]:
-    blockedWords.append(data)
 
 @bot.tree.command(name='dogwater', description = "Ur dogwater kid")
 async def dogwater(interaction: discord.Interaction, user: discord.User):
