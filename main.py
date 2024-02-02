@@ -166,6 +166,7 @@ async def stop_music(interaction: discord.Interaction):
 
 @bot.event
 async def on_ready():
+    global activity
     if not activity == None:
         activity = discord.Game(name=activity)
         await bot.change_presence(status=discord.Status.online, activity=activity)
