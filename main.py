@@ -80,10 +80,10 @@ async def heck(interaction: discord.Interaction, user: discord.User):
 async def rat(interaction: discord.Interaction):
     await interaction.response.send_message("Rat?")
     
-@bot.tree.command(name='ping', description = "Check the bots ping")
-async def ping(interaction: discord.Interaction):
-     await interaction.response.send_message(f"The bots ping is {round(bot.latency * 1000)}ms")
-    
+@bot.tree.command(name='latency', description = "Check the bots latency to discord")
+async def latency(interaction: discord.Interaction):
+     await interaction.response.send_message(f"The bots latency is {round(bot.latency * 1000)}ms")
+
 @bot.tree.command(name='join', description = "Joins vc")
 async def join(interaction: discord.Interaction):
     if interaction.user.voice is not None:
