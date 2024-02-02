@@ -4,6 +4,7 @@ import json
 import random
 from discord import app_commands
 from discord.ext import commands
+from discord.errors import *
 import datetime
 import string
 import yt_dlp
@@ -53,15 +54,6 @@ class YTDLSource(discord.PCMVolumeTransformer):
             data = data['entries'][0]
         filename = data['title'] if stream else ytdl.prepare_filename(data)
         return filename
-
-with open('config.json') as  f:
-    data1 = json.load(f)
-for data in data1['token']:
-    token = data
-for data in data1['Activity']:
-    activity = data
-for data in data1['dogwater']:
-    dogwaterWords.append(data)
 
 @bot.tree.command(name='dogwater', description = "Ur dogwater kid")
 async def dogwater(interaction: discord.Interaction, user: discord.User):
@@ -171,17 +163,9 @@ async def stop_music(interaction: discord.Interaction):
         voice_channel.stop()
     else:
         await interaction.response.send_message("The bot is not playing anything at the moment.")
-        
-@bot.event
-async def on_message(message):
-    if message.author == bot.user:
-        return
-    if message.content == "ok":
-        await message.channel.send("ok")
 
 @bot.event
 async def on_ready():
-    global activity
     if not activity == None:
         activity = discord.Game(name=activity)
         await bot.change_presence(status=discord.Status.online, activity=activity)
@@ -190,7 +174,7 @@ async def on_ready():
         print(f'Synced {len(synced)} commands')
     except Exception as e:
         print(e)
-    
+
 def get_uptime():
     return str(datetime.timedelta(seconds=int(round(time.time()-startTime))))
 
@@ -199,10 +183,36 @@ def logout():
     print("Logging out bot")
 
 def main():
+    global activity
+    with open('config.json') as f:
+        data1 = json.load(f)
+        for data in data1['token']:
+            token = data
+        for data in data1['Activity']:
+            activity = data
+        for data in data1['dogwater']:
+            dogwaterWords.append(data)
     if token == None or token == "":
         print("No token, please provide a bot token")
         return
-    bot.run(token)
+    try:
+        bot.run(token)
+    except LoginFailure:
+        print("Login failure.")
+        exit()
+    except RateLimited as e:
+        print(f"Rate limited. Try again in {e.retry_after}")
+        exit()
+    except HTTPException as e:
+        print(f"HTTP request error {e.status}.")
+        exit()
+    except GatewayNotFound:
+        print("Gateway not found. The gateway to connect to discord was not found.")
+        exit()
+    except InvalidData:
+        print("Invalid Data.")
+    except ConnectionClosed:
+        print("Connection Closed.")
 
 if __name__ == "__main__":
     main()
