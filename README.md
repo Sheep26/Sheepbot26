@@ -17,7 +17,7 @@ This is an example config. Save it as config.json
 	],
 
 	"dogwater": [
-		"{name:} is dogwater"
+		"{name} is dogwater"
 	],
 
 	"Activity": [
