@@ -15,9 +15,9 @@ This is an example config. Save it as config.json
 	"token": null,
 	"Activity": null,
 	"openaiToken": null
-	
+
 	"dogwater": [
 		"{name} is dogwater"
-	],
+	]
 }
 ```
