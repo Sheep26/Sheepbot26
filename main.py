@@ -16,7 +16,6 @@ blockedWords = []
 dogwaterWords = []
 email = ["gmail.com", "hotmail.com", "outlook.com", "oatlocker.com", "yahoo.co.nz", "oatlocker.com", "deeznuts.com", "gmail.com", "yahoo.co.nz", "outlook.com", "gmail.com"]
 token: str
-openaiToken: str
 
 yt_dlp.utils.bug_reports_message = lambda: ''
 
@@ -189,7 +188,6 @@ def main():
         data = json.load(f)
         token = data["token"]
         activity = data["Activity"]
-        openaiToken = data["openaiToken"]
         for dogwaterStr in data['dogwater']:
             dogwaterWords.append(dogwaterStr)
     if token == None or token == "":
