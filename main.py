@@ -10,13 +10,13 @@ import string
 import yt_dlp
 import asyncio
 bot = commands.Bot(command_prefix=".", intents = discord.Intents.all())
-activity = ""
+activity: str
 startTime = time.time()
-songs = []
 blockedWords = []
 dogwaterWords = []
 email = ["gmail.com", "hotmail.com", "outlook.com", "oatlocker.com", "yahoo.co.nz", "oatlocker.com", "deeznuts.com", "gmail.com", "yahoo.co.nz", "outlook.com", "gmail.com"]
 token: str
+openaiToken: str
 
 yt_dlp.utils.bug_reports_message = lambda: ''
 
@@ -186,13 +186,12 @@ def logout():
 def main():
     global activity
     with open('config.json') as f:
-        data1 = json.load(f)
-        for data in data1['token']:
-            token = data
-        for data in data1['Activity']:
-            activity = data
-        for data in data1['dogwater']:
-            dogwaterWords.append(data)
+        data = json.load(f)
+        token = data["token"]
+        activity = data["Activity"]
+        openaiToken = data["openaiToken"]
+        for dogwaterStr in data['dogwater']:
+            dogwaterWords.append(dogwaterStr)
     if token == None or token == "":
         print("No token, please provide a bot token")
         return

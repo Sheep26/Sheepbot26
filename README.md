@@ -12,16 +12,11 @@ This is an example config. Save it as config.json
 // config.json
 
 {
-	"token": [
-		null
-	],
-
+	"token": "",
 	"dogwater": [
 		"{name} is dogwater"
 	],
-
-	"Activity": [
-		null
-	]
+	"Activity": null,
+	"openaiToken": ""
 }
 ```
