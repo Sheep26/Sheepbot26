@@ -1,5 +1,4 @@
-version: "3.8"
 services:
   main:
     build: .
-    container_name: Sheepbot26
+    container_name: sheepbot26
